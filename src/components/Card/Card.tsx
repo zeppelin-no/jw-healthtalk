@@ -2,7 +2,6 @@ import React, { KeyboardEvent, memo } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { formatDurationTag } from '../../utils/formatting';
 import Lock from '../../icons/Lock';
 
 import styles from './Card.module.scss';
@@ -11,11 +10,8 @@ type CardProps = {
   onClick?: () => void;
   onHover?: () => void;
   title: string;
-  duration: number;
   posterSource?: string;
-  seriesId?: string;
-  seasonNumber?: string;
-  episodeNumber?: string;
+  tag: JSX.Element;
   progress?: number;
   posterAspect?: '1:1' | '2:1' | '2:3' | '4:3' | '5:3' | '16:9' | '9:16';
   featured?: boolean;
@@ -31,11 +27,8 @@ function Card({
   onClick,
   onHover,
   title,
-  duration,
   posterSource,
-  seriesId,
-  seasonNumber,
-  episodeNumber,
+  tag,
   progress,
   posterAspect = '16:9',
   enableTitle = true,
@@ -54,24 +47,6 @@ function Card({
   const posterClassNames = classNames(styles.poster, styles[`aspect${posterAspect.replace(':', '')}`], {
     [styles.current]: isCurrent,
   });
-
-  const renderTag = () => {
-    if (loading || disabled || !title) return null;
-
-    if (seriesId) {
-      return <div className={styles.tag}>Series</div>;
-    } else if (seasonNumber && episodeNumber) {
-      return (
-        <div className={styles.tag}>
-          S{seasonNumber}:E{episodeNumber}
-        </div>
-      );
-    } else if (duration) {
-      return <div className={styles.tag}>{formatDurationTag(duration)}</div>;
-    } else if (duration === 0) {
-      return <div className={classNames(styles.tag, styles.live)}>{t('live')}</div>;
-    }
-  };
 
   return (
     <div
@@ -94,7 +69,7 @@ function Card({
                   <Lock />
                 </div>
               )}
-              {renderTag()}
+              {tag}
             </div>
           </div>
         )}

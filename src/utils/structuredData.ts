@@ -1,25 +1,24 @@
-import type { Playlist, PlaylistItem } from '../../types/playlist';
-
 import { episodeURL, movieURL } from './formatting';
 import { secondsToISO8601 } from './datetime';
 
-export const generateSeriesMetadata = (seriesPlaylist: Playlist) => {
-  const seriesCanonical = `${window.location.origin}${episodeURL(seriesPlaylist)}`;
+import type { PlaylistItem } from '#types/playlist';
+import type { Series } from '#types/series';
+
+export const generateSeriesMetadata = (series: Series) => {
+  const seriesCanonical = `${window.location.origin}${episodeURL(series)}`;
 
   return {
     '@type': 'TVSeries',
     '@id': seriesCanonical,
-    name: seriesPlaylist.title,
-    numberOfEpisodes: seriesPlaylist.playlist.length,
-    numberOfSeasons: seriesPlaylist.playlist.reduce(function (list, playlistItem) {
-      return !playlistItem.seasonNumber || list.includes(playlistItem.seasonNumber) ? list : list.concat(playlistItem.seasonNumber);
-    }, [] as string[]).length,
+    name: series.title,
+    numberOfEpisodes: series.episode_count,
+    numberOfSeasons: series.seasons?.length || 1,
   };
 };
 
-export const generateEpisodeJSONLD = (seriesPlaylist: Playlist, episode: PlaylistItem) => {
-  const episodeCanonical = `${window.location.origin}${episodeURL(seriesPlaylist, episode.mediaid)}`;
-  const seriesMetadata = generateSeriesMetadata(seriesPlaylist);
+export const generateEpisodeJSONLD = (series: Series, episode: PlaylistItem) => {
+  const episodeCanonical = `${window.location.origin}${episodeURL(series, episode)}`;
+  const seriesMetadata = generateSeriesMetadata(series);
 
   return JSON.stringify({
     '@context': 'http://schema.org/',

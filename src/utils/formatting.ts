@@ -1,13 +1,6 @@
 import { getSeriesId, getSeriesIdFromEpisode, isEpisode, isLiveChannel, isSeriesPlaceholder } from '#src/utils/media';
-import type { Playlist, PlaylistItem } from '#types/playlist';
-
-export const formatDurationTag = (seconds: number): string | null => {
-  if (!seconds) return null;
-
-  const minutes = Math.ceil(seconds / 60);
-
-  return `${minutes} min`;
-};
+import type { PlaylistItem } from '#types/playlist';
+import type { Series } from '#types/series';
 
 /**
  * @param duration Duration in seconds
@@ -83,9 +76,9 @@ export const liveChannelsURL = (playlistId: string, channelId?: string, play = f
   });
 };
 
-export const episodeURL = (seriesPlaylist: Playlist, episodeId?: string, play: boolean = false, playlistId?: string | null) =>
-  addQueryParams(`/s/${seriesPlaylist.feedid}/${slugify(seriesPlaylist.title)}`, {
-    e: episodeId,
+export const episodeURL = (series: Series, episode?: PlaylistItem, play: boolean = false, playlistId?: string | null) =>
+  addQueryParams(`/s/${series.series_id}/${slugify(series.title)}`, {
+    e: episode?.mediaid,
     r: playlistId,
     play: play ? '1' : null,
   });
@@ -143,5 +136,3 @@ export const formatVideoMetaString = (item: PlaylistItem, episodesLabel?: string
 
   return metaData.join(' • ');
 };
-
-export const formatSeriesMetaString = (item: PlaylistItem) => `S${item.seasonNumber}:E${item.episodeNumber}`;

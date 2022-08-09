@@ -14,7 +14,7 @@ type Props = {
   defaultLabel?: string;
   options?: string[];
   optionsStyle?: string;
-  valuePrefix?: string;
+  formatValue?: (value: string) => string;
   label?: string;
   fullWidth?: boolean;
   size?: 'small' | 'medium';
@@ -34,7 +34,7 @@ const Dropdown: React.FC<Props & React.AriaAttributes> = ({
   optionsStyle,
   label,
   fullWidth,
-  valuePrefix,
+  formatValue,
   error,
   helperText,
   required = false,
@@ -62,8 +62,7 @@ const Dropdown: React.FC<Props & React.AriaAttributes> = ({
           {options &&
             options.map((option) => (
               <option className={classNames(styles.option, optionsStyle)} key={option} value={option}>
-                {valuePrefix}
-                {option}
+                {formatValue ? formatValue(option) : option}
               </option>
             ))}
         </select>

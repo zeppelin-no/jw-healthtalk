@@ -14,11 +14,15 @@
   "filter_videos_by_genre": "",
   "home": "",
   "live": "",
-  "now:": "",
+  "now": "",
   "optional": "",
   "play_item": "",
   "sign_in": "",
   "sign_up": "",
   "slide_left": "",
-  "slide_right": ""
+  "slide_right": "",
+  "tag_duration_minutes": "",
+  "tag_episode": "",
+  "tag_season_episode": "",
+  "tag_series": ""
 }

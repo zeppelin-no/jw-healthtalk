@@ -10,6 +10,7 @@ import Card from '#src/components/Card/Card';
 import VirtualizedGrid from '#src/components/VirtualizedGrid/VirtualizedGrid';
 import type { AccessModel } from '#types/Config';
 import type { PlaylistItem } from '#types/playlist';
+import CardTag from '#src/components/Tag/CardTag';
 
 const defaultCols: Breakpoints = {
   [Breakpoint.xs]: 2,
@@ -57,7 +58,7 @@ function CardGrid({
     if (!rows[rowIndex][columnIndex]) return;
 
     const playlistItem: PlaylistItem = rows[rowIndex][columnIndex];
-    const { mediaid, title, duration, seriesId, episodeNumber, seasonNumber } = playlistItem;
+    const { mediaid, title } = playlistItem;
 
     return (
       <div className={styles.cell} style={style} key={mediaid} role="row">
@@ -66,12 +67,9 @@ function CardGrid({
             key={mediaid}
             title={title}
             enableTitle={enableCardTitles}
-            duration={duration}
+            tag={<CardTag item={playlistItem} />}
             posterSource={findPlaylistImageForWidth(playlistItem, imageSourceWidth)}
             progress={watchHistory ? watchHistory[mediaid] : undefined}
-            seriesId={seriesId}
-            episodeNumber={episodeNumber}
-            seasonNumber={seasonNumber}
             onClick={() => onCardClick(playlistItem, playlistItem.feedid)}
             onHover={typeof onCardHover === 'function' ? () => onCardHover(playlistItem) : undefined}
             loading={isLoading}

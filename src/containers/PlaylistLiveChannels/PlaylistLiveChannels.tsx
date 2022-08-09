@@ -18,13 +18,14 @@ import ShareButton from '#src/components/ShareButton/ShareButton';
 import StartWatchingButton from '#src/containers/StartWatchingButton/StartWatchingButton';
 import Cinema from '#src/containers/Cinema/Cinema';
 import useEntitlement from '#src/hooks/useEntitlement';
-import { addQueryParams, formatDurationTag, liveChannelsURL } from '#src/utils/formatting';
+import { addQueryParams, liveChannelsURL } from '#src/utils/formatting';
 import Button from '#src/components/Button/Button';
 import Play from '#src/icons/Play';
 import useLiveProgram from '#src/hooks/useLiveProgram';
 import Tag from '#src/components/Tag/Tag';
 import useBreakpoint, { Breakpoint } from '#src/hooks/useBreakpoint';
 import { generateMovieJSONLD } from '#src/utils/structuredData';
+import DurationTag from '#src/components/Tag/DurationTag';
 
 function PlaylistLiveChannels({ playlist: { feedid, playlist } }: { playlist: Playlist }) {
   const { t } = useTranslation('epg');
@@ -92,7 +93,6 @@ function PlaylistLiveChannels({ playlist: { feedid, playlist } }: { playlist: Pl
     const startTime = new Date(program.startTime);
     const endTime = new Date(program.endTime);
     const durationInSeconds = differenceInSeconds(endTime, startTime);
-    const duration = formatDurationTag(durationInSeconds);
 
     return (
       <>
@@ -101,7 +101,7 @@ function PlaylistLiveChannels({ playlist: { feedid, playlist } }: { playlist: Pl
         </Tag>
         {t('on_channel', { name: channel.title })}
         {' • '}
-        {duration}
+        <DurationTag seconds={durationInSeconds} />
       </>
     );
   }, [channel, isLive, program, t]);

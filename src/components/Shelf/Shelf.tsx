@@ -13,6 +13,7 @@ import { isLocked } from '#src/utils/entitlements';
 import TileDock from '#src/components/TileDock/TileDock';
 import Card from '#src/components/Card/Card';
 import type { Playlist, PlaylistItem } from '#types/playlist';
+import CardTag from '#src/components/Tag/CardTag';
 
 export const tileBreakpoints: Breakpoints = {
   [Breakpoint.xs]: 1,
@@ -75,12 +76,9 @@ const Shelf: React.FC<ShelfProps> = ({
       <Card
         title={item.title}
         enableTitle={enableCardTitles}
-        duration={item.duration}
         progress={watchHistory ? watchHistory[item.mediaid] : undefined}
+        tag={<CardTag item={item} />}
         posterSource={findPlaylistImageForWidth(item, imageSourceWidth)}
-        seriesId={item.seriesId}
-        seasonNumber={item.seasonNumber}
-        episodeNumber={item.episodeNumber}
         onClick={isInView ? () => onCardClick(item, playlist.feedid, type) : undefined}
         onHover={typeof onCardHover === 'function' ? () => onCardHover(item) : undefined}
         featured={featured}

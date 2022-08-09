@@ -20,7 +20,7 @@ export const isSeriesPlaceholder = (item: PlaylistItem) => {
 };
 
 export const isEpisode = (item: PlaylistItem) => {
-  return item && typeof item.episodeNumber !== 'undefined';
+  return item && 'episodeNumber' in item;
 };
 
 export const isLiveChannel = (item: PlaylistItem): item is RequiredProperties<PlaylistItem, 'contentType' | 'liveChannelsId'> =>

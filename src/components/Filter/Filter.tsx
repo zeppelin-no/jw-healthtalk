@@ -10,13 +10,13 @@ import styles from './Filter.module.scss';
 type Props = {
   name: string;
   value: string;
-  valuePrefix?: string;
+  formatValue?: (value: string) => string;
   defaultLabel: string;
   options: string[];
   setValue: (value: string) => void;
 };
 
-const Filter: FC<Props> = ({ name, value, defaultLabel, options, setValue, valuePrefix = '' }) => {
+const Filter: FC<Props> = ({ name, value, defaultLabel, options, setValue, formatValue }) => {
   const { t } = useTranslation('common');
   const breakpoint: Breakpoint = useBreakpoint();
 
@@ -25,14 +25,14 @@ const Filter: FC<Props> = ({ name, value, defaultLabel, options, setValue, value
   }
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => setValue(event.target.value);
 
-  const showFilterRow = breakpoint >= Breakpoint.md && options.length < 6;
+  const showFilterRow = breakpoint >= Breakpoint.md && options.length < 8;
 
   return (
     <Fragment>
       {showFilterRow ? (
         <div className={styles.filterRow} role="listbox">
           {options.map((option) => (
-            <Button label={`${valuePrefix}${option}`} onClick={() => setValue(option)} key={option} active={value === option} role="option" />
+            <Button label={formatValue ? formatValue(option) : option} onClick={() => setValue(option)} key={option} active={value === option} role="option" />
           ))}
           <Button label={defaultLabel} onClick={() => setValue('')} active={value === ''} key={defaultLabel} role="option" />
         </div>
@@ -43,7 +43,7 @@ const Filter: FC<Props> = ({ name, value, defaultLabel, options, setValue, value
             size="small"
             options={options}
             defaultLabel={defaultLabel}
-            valuePrefix={valuePrefix}
+            formatValue={formatValue}
             name={name}
             value={value}
             onChange={handleChange}

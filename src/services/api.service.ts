@@ -3,7 +3,7 @@ import { getDataOrThrow } from '../utils/api';
 
 import { filterMediaOffers } from '#src/utils/entitlements';
 import type { GetPlaylistParams, Playlist, PlaylistItem } from '#types/playlist';
-import type { Series, GetSeriesParams } from '#types/series';
+import type { SeriesData, GetSeriesParams } from '#types/series';
 
 /**
  * Transform incoming media items
@@ -111,7 +111,7 @@ export const getMediaByIds = async (ids: string[], tokens?: Record<string, strin
  * @param {string} id
  * @param params
  */
-export const getSeries = async (id: string, params: GetSeriesParams = {}): Promise<Series | undefined> => {
+export const getSeries = async (id: string, params: GetSeriesParams = {}): Promise<SeriesData | undefined> => {
   if (!id) {
     throw new Error('Series ID is required');
   }
