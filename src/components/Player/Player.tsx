@@ -72,7 +72,12 @@ const Player: React.FC<Props> = ({
   const handlePlaylistItem = useEventCallback(onPlaylistItem);
   const handlePlaylistItemCallback = useEventCallback(onPlaylistItemCallback);
   const handleNextClick = useEventCallback(onNext);
-  const handleReady = useEventCallback(() => onReady && onReady(playerRef.current));
+  const handleReady = useEventCallback(() => {
+    onReady && onReady(playerRef.current);
+
+    // Simple fix to make sure the keyboard shortcuts work on first load
+    jwplayer().getContainer().focus();
+  });
 
   const attachEvents = useCallback(() => {
     playerRef.current?.on('ready', handleReady);
