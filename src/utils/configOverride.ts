@@ -1,6 +1,6 @@
 import type { NavigateFunction } from 'react-router/dist/lib/hooks';
 
-import { logDev } from '#src/utils/common';
+import { IS_DEMO_MODE, logDev } from '#src/utils/common';
 import type { Settings } from '#src/stores/SettingsStore';
 
 // Use local storage so the override persists until cleared
@@ -35,11 +35,14 @@ export function getConfigSource(searchParams: URLSearchParams, settings: Setting
 
   const configQueryParam = searchParams.get(configQueryKey) ?? searchParams.get(configLegacyQueryKey);
 
+  // Demo mode reverts to an undefined config to show the prompt screen
+  const defaultConfig = IS_DEMO_MODE ? undefined : settings.defaultConfigSource;
+
   if (configQueryParam !== null) {
     // If the query param exists but the value is empty, clear the storage and allow fallback to the default config
     if (!configQueryParam) {
       storage.removeItem(configFileStorageKey);
-      return settings.defaultConfigSource;
+      return defaultConfig;
     }
 
     // If it's valid, store it and return it
@@ -64,7 +67,7 @@ export function getConfigSource(searchParams: URLSearchParams, settings: Setting
     storage.removeItem(configFileStorageKey);
   }
 
-  return settings.defaultConfigSource;
+  return defaultConfig;
 }
 
 export function cleanupQueryParams(searchParams: URLSearchParams, settings: Settings, configSource: string | undefined) {
@@ -82,8 +85,8 @@ export function cleanupQueryParams(searchParams: URLSearchParams, settings: Sett
     anyTouched = true;
   }
 
-  // If the config source is not the default and the query string isn't set right, set the ?app-config= param
-  if (configSource && configSource !== settings?.defaultConfigSource && searchParams.get(configQueryKey) !== configSource) {
+  // If demo mode or the config source is not the default and the query string isn't set to the config source, set the ?app-config= param
+  if (configSource && (IS_DEMO_MODE || configSource !== settings?.defaultConfigSource) && searchParams.get(configQueryKey) !== configSource) {
     searchParams.set(configQueryKey, configSource);
     anyTouched = true;
   }

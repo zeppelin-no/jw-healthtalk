@@ -14,9 +14,9 @@ import ConfirmationDialog from '#components/ConfirmationDialog/ConfirmationDialo
 import LoadingOverlay from '#components/LoadingOverlay/LoadingOverlay';
 import type { Config } from '#types/Config';
 import DevStackTrace from '#components/DevStackTrace/DevStackTrace';
+import { useSettingsStore } from '#src/stores/SettingsStore';
 
 const regex = /^[a-z,\d]{0,8}$/g;
-const fallbackConfig = import.meta.env.APP_DEMO_FALLBACK_CONFIG_ID;
 
 interface Props {
   selectedConfigSource: string | undefined;
@@ -107,6 +107,9 @@ const DemoConfigDialog = ({ selectedConfigSource, configQuery }: Props) => {
       await configNavigate(state.configSource);
     }
   };
+
+  // The default config source is used as the fallback in demo mode
+  const fallbackConfig = useSettingsStore((s) => s.defaultConfigSource);
 
   const cancelConfigClick: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
