@@ -8,6 +8,7 @@ import Fade from '#components/Animation/Fade/Fade';
 import IconButton from '#components/IconButton/IconButton';
 import ArrowLeft from '#src/icons/ArrowLeft';
 import PlayerContainer from '#src/containers/PlayerContainer/PlayerContainer';
+import useKeyHandler from '#src/hooks/useKeyHandler';
 
 type Props = {
   open: boolean;
@@ -83,7 +84,7 @@ const Cinema: React.FC<Props> = ({
 
   return (
     <Fade open={open} className={styles.fade}>
-      <div className={styles.cinema}>
+      <div className={styles.cinema} onKeyDown={useKeyHandler('Escape', onClose)}>
         <PlayerContainer
           item={item}
           feedId={feedId}

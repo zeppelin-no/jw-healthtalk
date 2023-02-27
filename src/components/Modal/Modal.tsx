@@ -7,6 +7,7 @@ import scrollbarSize from '#src/utils/dom';
 import Fade from '#components/Animation/Fade/Fade';
 import Grow from '#components/Animation/Grow/Grow';
 import { testId } from '#src/utils/common';
+import useKeyHandler from '#src/hooks/useKeyHandler';
 
 type Props = {
   children?: React.ReactNode;
@@ -20,11 +21,7 @@ const Modal: React.FC<Props> = ({ open, onClose, children, AnimationComponent = 
   const lastFocus = useRef<HTMLElement>() as React.MutableRefObject<HTMLElement>;
   const modalRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>;
 
-  const keyDownEventHandler = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape' && onClose) {
-      onClose();
-    }
-  };
+  const keyDownEventHandler = useKeyHandler('Escape', onClose);
 
   // delay the transition state so the CSS transition kicks in after toggling the `open` prop
   useEffect(() => {

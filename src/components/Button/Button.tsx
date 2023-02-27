@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 import classNames from 'classnames';
-import { NavLink } from 'react-router-dom';
+import { NavLink, NavLinkProps } from 'react-router-dom';
 
 import styles from './Button.module.scss';
 
@@ -10,6 +10,15 @@ type Color = 'default' | 'primary';
 
 type Variant = 'contained' | 'outlined' | 'text';
 
+type ButtonProps = {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: 'button' | 'submit' | 'reset';
+} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+
+type AnchorProps = {
+  to: string;
+} & NavLinkProps;
+
 type Props = {
   children?: React.ReactNode;
   label: string;
@@ -18,17 +27,11 @@ type Props = {
   fullWidth?: boolean;
   startIcon?: JSX.Element;
   variant?: Variant;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  tabIndex?: number;
   size?: 'small' | 'medium' | 'large';
-  to?: string;
-  role?: string;
   className?: string;
-  type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   busy?: boolean;
-  id?: string;
-} & React.AriaAttributes;
+} & (ButtonProps | AnchorProps);
 
 const Button: React.FC<Props> = ({
   label,
@@ -39,13 +42,10 @@ const Button: React.FC<Props> = ({
   active = false,
   variant = 'outlined',
   size = 'medium',
-  disabled,
   busy,
-  type,
-  to,
-  onClick,
   className,
-  ...rest
+  disabled,
+  ...elementProps
 }: Props) => {
   const buttonClassName = (isActive: boolean) =>
     classNames(styles.button, className, styles[color], styles[variant], {
@@ -65,16 +65,16 @@ const Button: React.FC<Props> = ({
     </>
   );
 
-  if (to) {
+  if ('to' in elementProps) {
     return (
-      <NavLink className={({ isActive }) => buttonClassName(isActive)} to={to} {...rest} end>
+      <NavLink className={({ isActive }) => buttonClassName(isActive)} {...elementProps} end>
         {content}
       </NavLink>
     );
   }
 
   return (
-    <button className={buttonClassName(active)} onClick={onClick} type={type} disabled={disabled} aria-disabled={disabled} {...rest}>
+    <button className={buttonClassName(active)} disabled={disabled} aria-disabled={disabled} {...elementProps}>
       {content}
     </button>
   );

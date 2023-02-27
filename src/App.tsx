@@ -23,6 +23,18 @@ export default function App() {
       .catch((e) => seti18nState({ isLoading: false, error: e as Error }));
   }, []);
 
+  // Prevent scrolling on spacebar press
+  useEffect(() => {
+    const preventScroll = (event: KeyboardEvent) => {
+      if (event.code === 'Space' && event.target == document.body) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', preventScroll);
+    return () => window.removeEventListener('keydown', preventScroll);
+  }, []);
+
   if (i18nState.isLoading) {
     return <LoadingOverlay />;
   }

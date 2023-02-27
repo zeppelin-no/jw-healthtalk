@@ -13,6 +13,7 @@ import { useCheckoutStore } from '#src/stores/CheckoutStore';
 import type { PlaylistItem } from '#types/playlist';
 import { useWatchHistoryStore } from '#src/stores/WatchHistoryStore';
 import { useAccountStore } from '#src/stores/AccountStore';
+import useKeyHandler from '#src/hooks/useKeyHandler';
 
 type Props = {
   item: PlaylistItem;
@@ -72,6 +73,7 @@ const StartWatchingButton: React.VFC<Props> = ({ item, playUrl, disabled = false
       onClick={handleStartWatchingClick}
       fullWidth={breakpoint < Breakpoint.md}
       disabled={disabled}
+      onKeyDown={useKeyHandler('Space', handleStartWatchingClick)}
     >
       {videoProgress ? (
         <div className={styles.progressRail}>
