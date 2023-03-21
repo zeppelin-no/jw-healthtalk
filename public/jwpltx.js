@@ -61,6 +61,11 @@ window.jwpltx = window.jwpltx || {};
     sendData('i');
   };
 
+  // Process seeked event
+  o.seeked = function () {
+    sendData('vs');
+  };
+
   // Process a time tick event
   o.time = function (vp, vd) {
     // 0 or negative vd means live stream
